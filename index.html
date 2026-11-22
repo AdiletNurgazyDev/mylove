@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1b1017">
+<title>Айым + Адлет</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Manrope:wght@400;500;600&display=swap">
+<style>
+  /* Layout: a quiet photo journal. Arch-framed portraits alternate left and right of short text blocks, names set large in italic serif as the single bold gesture. Deliberately one dark, candle-lit look. */
+  :root {
+    --bg: #1b1017;
+    --surface: #271822;
+    --line: #432b38;
+    --fg: #f7ebe6;
+    --muted: #cfb2b6;
+    --rose: #eaa5ad;
+    --gold: #d9b48f;
+    --font-display: "Cormorant Garamond", "Playfair Display", Georgia, "Times New Roman", serif;
+    --font-body: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.7;
+    padding-block: 0 2rem;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    background-image:
+      radial-gradient(60rem 40rem at 85% -5%, rgba(234,165,173,.14), transparent 60%),
+      radial-gradient(50rem 40rem at -10% 40%, rgba(217,180,143,.08), transparent 60%);
+    background-attachment: scroll;
+  }
+  .wrap { width: 100%; max-width: 1060px; margin: 0 auto; }
+  h1, h2 { font-family: var(--font-display); font-weight: 600; margin: 0; text-wrap: balance; }
+  p { margin: 0; text-wrap: pretty; }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  .tag {
+    font-size: .74rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); font-weight: 600;
+  }
+
+  /* Hero */
+  .hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(1.5rem, 5vw, 4rem); align-items: center; padding-block: 3.5rem 4rem; }
+  .hero-text { min-width: 0; display: flex; flex-direction: column; gap: 1.4rem; animation: rise .9s ease both; }
+  .names { font-style: italic; font-size: clamp(3.4rem, 11vw, 7.6rem); line-height: .95; letter-spacing: -.01em; }
+  .names .plus { color: var(--rose); font-style: normal; font-weight: 500; display: inline-block; padding-inline: .08em; }
+  .lead { font-family: var(--font-display); font-size: clamp(1.35rem, 3.2vw, 1.85rem); line-height: 1.35; color: var(--muted); max-width: 26ch; font-style: italic; font-weight: 500; }
+  .arch { margin: 0; aspect-ratio: 4 / 5; max-width: 100%; border-radius: 999px 999px 28px 28px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 30px 70px -30px rgba(0,0,0,.7); animation: rise 1.1s .12s ease both; }
+  .arch img { object-position: 50% 30%; }
+
+  /* Chapters */
+  .chapter { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 5vw, 4.5rem); align-items: center; padding-block: clamp(2.5rem, 7vw, 5rem); border-top: 1px solid var(--line); }
+  .chapter.flip .photo { order: 2; }
+  .photo { margin: 0; min-width: 0; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 24px 60px -30px rgba(0,0,0,.75); max-width: 100%; }
+  .photo.tall { aspect-ratio: 4 / 5; border-radius: 28px 28px 999px 999px; }
+  .photo.wide { aspect-ratio: 4 / 3; border-radius: 28px; }
+  .photo.round { aspect-ratio: 1 / 1; border-radius: 50%; }
+  .copy { min-width: 0; display: flex; flex-direction: column; gap: 1rem; }
+  .copy h2 { font-size: clamp(2.2rem, 5.5vw, 3.4rem); line-height: 1.05; font-style: italic; }
+  .copy p { color: var(--muted); max-width: 40ch; }
+
+  /* Reasons */
+  .reasons { border-top: 1px solid var(--line); padding-block: clamp(3rem, 8vw, 5.5rem); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.6rem; }
+  .reasons h2 { font-size: clamp(2.2rem, 6vw, 3.6rem); font-style: italic; }
+  .heart-btn { position: relative; width: 5.2rem; height: 5.2rem; border-radius: 50%; border: 1px solid var(--rose); background: transparent; color: var(--rose); cursor: pointer; display: grid; place-items: center; transition: transform .2s ease, background .2s ease; }
+  .heart-btn:hover { background: rgba(234,165,173,.12); transform: scale(1.05); }
+  .heart-btn:active { transform: scale(.95); }
+  .heart-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+  .heart-btn svg { width: 2.2rem; height: 2.2rem; fill: currentColor; }
+  .reason { min-height: 4.5rem; max-width: 30ch; font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: clamp(1.5rem, 4vw, 2.1rem); line-height: 1.3; }
+  .reason.swap { animation: fade .5s ease both; }
+  .hint { font-size: .85rem; color: var(--muted); }
+  .burst { position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; fill: var(--rose); pointer-events: none; animation: float 1.3s ease-out forwards; }
+
+  /* Letter */
+  .letter { border-top: 1px solid var(--line); padding-block: clamp(3rem, 8vw, 5.5rem); display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(1.5rem, 5vw, 4rem); }
+  .letter h2 { font-size: clamp(2.2rem, 5.5vw, 3.4rem); font-style: italic; line-height: 1.05; }
+  .paper { min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: clamp(1.4rem, 4vw, 2.6rem); display: flex; flex-direction: column; gap: 1.1rem; }
+  .paper p { color: var(--fg); }
+  .sign { font-family: var(--font-display); font-style: italic; font-size: 1.7rem; color: var(--rose); }
+
+  /* Finale */
+  .finale { border-top: 1px solid var(--line); padding-block: clamp(3rem, 8vw, 5.5rem) 2rem; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.6rem; }
+  .finale .photo { width: min(100%, 360px); }
+  .finale h2 { font-size: clamp(2.4rem, 7vw, 4.4rem); font-style: italic; line-height: 1.02; }
+  .finale .small { color: var(--muted); font-size: .9rem; }
+
+  /* Motion layer */
+  .wrap { position: relative; z-index: 1; }
+  #fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+  .hero-text { animation: none; }
+  .hero-text > * { animation: rise 1s ease both; }
+  .hero-text > :nth-child(2) { animation-delay: .15s; }
+  .hero-text > :nth-child(3) { animation-delay: .35s; }
+  .names .nm {
+    background: linear-gradient(100deg, var(--fg) 0%, var(--fg) 30%, var(--rose) 48%, var(--gold) 58%, var(--fg) 76%, var(--fg) 100%);
+    background-size: 260% 100%; background-position: 0% 0;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shine 8s ease-in-out infinite alternate;
+  }
+  .names .plus { animation: beat 2.4s ease-in-out infinite; }
+  .arch, .photo { position: relative; }
+  .arch::after, .photo::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(247,235,230,.08), inset 0 -80px 90px -60px rgba(27,16,23,.55); }
+  .arch img, .photo img { animation: kb 18s ease-in-out infinite alternate; transition: filter .6s ease; }
+  .photo:hover img, .arch:hover img { filter: saturate(1.12) brightness(1.04); }
+  .heart-btn { animation: halo 2.4s ease-out infinite; }
+  .heart-btn svg { animation: beat 1.6s ease-in-out infinite; }
+  .tag { position: relative; padding-bottom: .55rem; }
+  .tag::after { content: ""; position: absolute; left: 0; bottom: 0; height: 1px; width: 2.6rem; background: linear-gradient(90deg, var(--gold), transparent); animation: grow 1.6s ease both; }
+  .reasons .tag::after, .finale .tag::after { left: 50%; transform: translateX(-50%); }
+  .sign { background: linear-gradient(100deg, var(--rose), var(--gold), var(--rose)); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 6s ease-in-out infinite alternate; }
+  .tapheart { position: fixed; width: 18px; height: 18px; margin: -9px 0 0 -9px; fill: var(--rose); pointer-events: none; z-index: 5; animation: float 1.4s ease-out forwards; }
+  @supports (animation-timeline: view()) {
+    .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+  }
+  @keyframes reveal { from { opacity: 0; transform: translateY(46px) scale(.96); } to { opacity: 1; transform: none; } }
+  @keyframes shine { to { background-position: 100% 0; } }
+  @keyframes beat { 0%, 100% { transform: scale(1); } 14% { transform: scale(1.12); } 28% { transform: scale(1); } 42% { transform: scale(1.08); } 70% { transform: scale(1); } }
+  @keyframes halo { 0% { box-shadow: 0 0 0 0 rgba(234,165,173,.45); } 70%, 100% { box-shadow: 0 0 0 26px rgba(234,165,173,0); } }
+  @keyframes kb { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.08) translate(-1%, -1%); } }
+  @keyframes grow { from { width: 0; opacity: 0; } to { width: 2.6rem; opacity: 1; } }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes float { to { opacity: 0; transform: translate(var(--dx), -90px) scale(1.8); } }
+
+  @media (max-width: 720px) {
+    body { font-size: 16px; }
+    .hero, .chapter, .letter { grid-template-columns: 1fr; }
+    .hero { padding-block: 2rem 3rem; }
+    .chapter.flip .photo { order: 0; }
+    .photo.tall, .arch { max-width: 420px; margin-inline: auto; }
+    .photo.round { max-width: 340px; margin-inline: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+
+</head>
+<body>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="hero-text">
+      <span class="tag">Наша маленькая история</span>
+      <h1 class="names"><span class="nm">Айым</span> <span class="plus">+</span> <span class="nm">Адлет</span></h1>
+      <p class="lead">Рядом с тобой тихо, тепло и по-настоящему.</p>
+    </div>
+    <figure class="arch"><img src="img/IMG_7873.jpg" alt="Айым и Адлет прижались друг к другу в кафе, на фото нарисованные ушки" width="787" height="1400"></figure>
+  </header>
+
+  <section class="chapter">
+    <figure class="photo reveal tall"><img src="img/deee8dac.jpg" alt="Селфи в зеркале лифта с огромным букетом белых роз" width="1050" height="1400" loading="lazy"></figure>
+    <div class="copy reveal">
+      <span class="tag">Белые розы</span>
+      <h2>Букет, который не помещается в руках</h2>
+      <p>Лифт, зеркало и розы, за которыми ты прячешь улыбку. Я прячусь за твоим плечом и думаю, что счастье выглядит именно так.</p>
+    </div>
+  </section>
+
+  <section class="chapter flip">
+    <figure class="photo reveal wide"><img src="img/c23b8f63.jpg" alt="Двое с огромным жёлтым осенним листом каштана, лист закрывает часть лица" width="1050" height="1400" loading="lazy" style="object-position: 50% 40%"></figure>
+    <div class="copy reveal">
+      <span class="tag">Золотая осень</span>
+      <h2>Лист размером с ладонь</h2>
+      <p>Ты находишь самый большой лист в парке и закрываешь им пол-лица. Остаются одни глаза, и мне этого достаточно, чтобы снова влюбиться.</p>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <figure class="photo reveal round"><img src="img/IMG_8238.jpg" alt="Вечернее селфи вдвоём возле дерева с жёлтой листвой" width="1100" height="825" loading="lazy" style="object-position: 45% 50%"></figure>
+    <div class="copy reveal">
+      <span class="tag">Вечерний свет</span>
+      <h2>Даже смазанный кадр у нас красивый</h2>
+      <p>Тёплые фонари, жёлтое дерево и мы рядом. Свет немного сбился, а момент остался точным. Такие вечера я хочу собирать всю жизнь.</p>
+    </div>
+  </section>
+
+  <section class="chapter flip">
+    <figure class="photo reveal wide"><img src="img/IMG_8050.jpg" alt="Смешное селфи: Айым в белом шарфе, Адлет за её плечом с удивлённым лицом" width="1100" height="825" loading="lazy"></figure>
+    <div class="copy reveal">
+      <span class="tag">Наши смешные лица</span>
+      <h2>С тобой не нужно быть идеальным</h2>
+      <p>Ты смотришь в камеру серьёзно, я корчу рожицы за твоей спиной. Мне нравится, что рядом с тобой можно просто смеяться и быть собой.</p>
+    </div>
+  </section>
+
+  <section class="reasons">
+    <span class="tag">Почему я люблю тебя</span>
+    <h2>Нажми на сердце</h2>
+    <button class="heart-btn" id="heart" type="button" aria-label="Показать следующую причину">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.6 4.8 6.1 4.5c2-.2 3.6.8 4.4 2.2l1.5 2.3 1.5-2.3c.8-1.4 2.4-2.4 4.4-2.2 3.5.3 5.2 3.9 3.7 7.3C19.500 16.400 12 21 12 21z"/></svg>
+    </button>
+    <p class="reason" id="reason" aria-live="polite">За то, как ты смеёшься.</p>
+    <p class="hint" id="hint">Причина 1 из 8</p>
+  </section>
+
+  <section class="letter">
+    <div>
+      <span class="tag">Письмо</span>
+      <h2>Несколько слов для тебя</h2>
+    </div>
+    <div class="paper reveal">
+      <p>Я люблю, как мы молчим вместе. Не нужно ничего объяснять, достаточно быть рядом.</p>
+      <p>Ты делаешь обычные дни особенными: прогулки без плана, глупые фото с ушками. Из таких мелочей и складывается всё, что мне дорого.</p>
+      <p>Спасибо, что ты есть. Спасибо за тепло, за терпение и за твою улыбку, от которой в любой серый день становится светло.</p>
+      <p>Я выбираю тебя сегодня, завтра и во все следующие дни.</p>
+      <span class="sign">Айым + Адлет</span>
+    </div>
+  </section>
+
+  <footer class="finale">
+    <figure class="photo reveal tall"><img src="img/4b8b3751.jpg" alt="Домашнее селфи вдвоём с нарисованными ушками и сердечками" width="787" height="1400" loading="lazy" style="object-position: 50% 35%"></figure>
+    <h2>Ты и я. Всё остальное подождёт.</h2>
+    <p class="small">Сделано с любовью</p>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var reasons = [
+      "За то, как ты смеёшься.",
+      "За твои глаза, в которых я теряюсь.",
+      "За то, что рядом с тобой спокойно.",
+      "За твою заботу о мелочах.",
+      "За наши глупые фото и смешные рожицы.",
+      "За тепло твоих рук.",
+      "За то, что ты веришь в меня.",
+      "За то, что ты просто есть."
+    ];
+    var i = 0;
+    var btn = document.getElementById("heart");
+    var text = document.getElementById("reason");
+    var hint = document.getElementById("hint");
+    var heartPath = "M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.6 4.8 6.1 4.5c2-.2 3.6.8 4.4 2.2l1.5 2.3 1.5-2.3c.8-1.4 2.4-2.4 4.4-2.2 3.5.3 5.2 3.9 3.7 7.3C19.5 16.4 12 21 12 21z";
+
+    function burst() {
+      for (var k = 0; k < 6; k++) {
+        var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        s.setAttribute("viewBox", "0 0 24 24");
+        s.setAttribute("class", "burst");
+        s.style.setProperty("--dx", (Math.random() * 120 - 60) + "px");
+        s.style.animationDelay = (k * 60) + "ms";
+        var p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        p.setAttribute("d", heartPath);
+        s.appendChild(p);
+        btn.appendChild(s);
+        setTimeout(function (el) { el.remove(); }, 1700, s);
+      }
+    }
+
+    btn.addEventListener("click", function () {
+      i = (i + 1) % reasons.length;
+      text.textContent = reasons[i];
+      hint.textContent = "Причина " + (i + 1) + " из " + reasons.length;
+      text.classList.remove("swap");
+      void text.offsetWidth;
+      text.classList.add("swap");
+      burst();
+    });
+  })();
+    (function () {
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var NS = "http://www.w3.org/2000/svg";
+    var HP = "M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.6 4.8 6.1 4.5c2-.2 3.6.8 4.4 2.2l1.5 2.3 1.5-2.3c.8-1.4 2.4-2.4 4.4-2.2 3.5.3 5.2 3.9 3.7 7.3C19.5 16.4 12 21 12 21z";
+
+    document.addEventListener("pointerdown", function (e) {
+      if (reduce || e.target.closest("#heart")) return;
+      for (var k = 0; k < 3; k++) {
+        var s = document.createElementNS(NS, "svg");
+        s.setAttribute("viewBox", "0 0 24 24");
+        s.setAttribute("class", "tapheart");
+        s.style.left = e.clientX + "px";
+        s.style.top = e.clientY + "px";
+        s.style.setProperty("--dx", (Math.random() * 90 - 45) + "px");
+        s.style.animationDelay = (k * 90) + "ms";
+        var p = document.createElementNS(NS, "path");
+        p.setAttribute("d", HP);
+        s.appendChild(p);
+        document.body.appendChild(s);
+        setTimeout(function (el) { el.remove(); }, 1700, s);
+      }
+    });
+
+    var cv = document.getElementById("fx");
+    if (!cv || reduce || !cv.getContext) return;
+    var ctx = cv.getContext("2d");
+    var w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var colors = ["234,165,173", "217,180,143", "247,235,230"];
+    var items = [];
+    var path = new Path2D(HP);
+
+    function size() {
+      w = window.innerWidth; h = window.innerHeight;
+      cv.width = w * dpr; cv.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function make(initial) {
+      return {
+        x: Math.random() * w,
+        y: initial ? Math.random() * h : h + 30,
+        s: 6 + Math.random() * 12,
+        v: .25 + Math.random() * .55,
+        a: .12 + Math.random() * .3,
+        ph: Math.random() * 6.28,
+        sw: 12 + Math.random() * 28,
+        r: Math.random() * 6.28,
+        rv: (Math.random() - .5) * .012,
+        c: colors[(Math.random() * colors.length) | 0],
+        heart: Math.random() < .55
+      };
+    }
+    size();
+    var n = w < 600 ? 16 : 28;
+    for (var i = 0; i < n; i++) items.push(make(true));
+    window.addEventListener("resize", size);
+
+    function frame(t) {
+      ctx.clearRect(0, 0, w, h);
+      for (var i = 0; i < items.length; i++) {
+        var p = items[i];
+        p.y -= p.v; p.r += p.rv;
+        var x = p.x + Math.sin(t / 1800 + p.ph) * p.sw;
+        if (p.y < -30) items[i] = make(false);
+        ctx.save();
+        ctx.translate(x, p.y);
+        ctx.rotate(p.r);
+        ctx.fillStyle = "rgba(" + p.c + "," + p.a + ")";
+        if (p.heart) {
+          var k = p.s / 24;
+          ctx.scale(k, k);
+          ctx.translate(-12, -12);
+          ctx.fill(path);
+        } else {
+          ctx.beginPath();
+          ctx.ellipse(0, 0, p.s * .45, p.s * .8, 0, 0, 6.28);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
+</script>
+</body>
+</html>
